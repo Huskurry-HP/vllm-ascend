@@ -48,11 +48,22 @@ jobs:
       vllm: 14acf429ac08b6d538ca6feb3e06b6d13895804d
   changes:
     runs-on: ubuntu-latest
+    # 强制覆盖环境变量，防止 Git 读取任何系统/全局的 proxy 配置
+    env:
+      HTTP_PROXY: ""
+      HTTPS_PROXY: ""
+      http_proxy: ""
+      https_proxy: ""
     outputs:
       e2e_tracker: ${{ steps.filter.outputs.e2e_tracker }}
       ut_tracker: ${{ steps.filter.outputs.ut_tracker }}
       _310_tracker: ${{ steps.filter.outputs._310_tracker }}
     steps:
+    # 显式使用 https://github.com 直连，不依赖 git config 的解析
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          proxy: false  # 显式禁用某些 runner 可能自带的代理设置
       # - name: Setup git proxy
       #   run: |
       #     git config --global --add safe.directory "$GITHUB_WORKSPACE"
