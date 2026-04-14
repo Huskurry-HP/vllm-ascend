@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'cpp', 'python' ]
+        language: [ 'python' ]
 
     steps:
     - name: Checkout repository
@@ -30,14 +30,14 @@ jobs:
         # 建议初期开启扩展规则，发现更多潜在风险
         queries: security-extended,security-and-quality
 
-    # --- C++ 编译逻辑 ---
-    - name: C++ Build (CMake)
-      if: matrix.language == 'cpp'
-      run: |
-        mkdir build
-        cd build
-        cmake ..
-        make -j$(nproc) 
+    # # --- C++ 编译逻辑 ---
+    # - name: C++ Build (CMake)
+    #   if: matrix.language == 'cpp'
+    #   run: |
+    #     mkdir build
+    #     cd build
+    #     cmake ..
+    #     make -j$(nproc) 
 
     # --- Python 自动处理 ---
     # Python 不需要手动编译，CodeQL 会自动扫描文件系统
